@@ -36,9 +36,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     if (!reviewer||!comment){
         return res.status(400).json({message:"User and comment required"})
     }
-    if (!book.reviews) {
-        book.reviews = {};
-    }
+    
     book.reviews[reviewer] = comment;
     return res.status(200).json({message:"Review added successfully", review:book.reviews});
 });
