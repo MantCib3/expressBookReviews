@@ -1,3 +1,4 @@
+const router = express.Router();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const session = require('express-session')
@@ -20,3 +21,5 @@ app.use("/customer", customer_routes);
 app.use("/", genl_routes);
 
 app.listen(PORT,()=>console.log("Server is running"));
+
+module.exports = router ;
