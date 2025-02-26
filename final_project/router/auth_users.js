@@ -5,30 +5,42 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (username)=>{ 
-username.some(user => user.username === username);
-};
+const isValid = (username)=>{
+  let userwithsamename = users.filter((user)=>{
+    return user.username === username
+  });
+  if(userwithsamename.length > 0){
+    return true;
+  } else {
+    return false;
+  }
+}
 const authenticatedUser = (username,password)=>{
 const user = users.find(user => user.username === username)
 return user && user.password === password; 
 };
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  if (!username || !password ) {
-  return res.status(400).json({message:"Username and Password are required."})
-  }
-  if (!isValid(username)) {
-    return res.status(401).json({message:"Invalid Username."})
-  }
-  if (!authenticatedUser(username,password)){
-    return res.status(401).json({message:"Invalid Password."})
-  }
-  const token= jwt.sign({ username }, 'your-secret-key', {expiresIn: '1h' })
-  return res.status(200).json({message: "Success.", token});
+  const username = req.body.username;
+  const password = req.body.password;
+  if (!username || !password) {
+        return res.status(404).json({message: "Error logging in"});
+    }
+    if (authenticatedUser(username,password)) {
+      let accessToken = jwt.sign({
+          data: password
+        }, 'access', { expiresIn: 60 * 20 });
+        req.session.authorization = {
+          accessToken, username
+      }
+      return res.status(200).send("Customer successfully logged in");
+    } else {
+      return res.status(208).send("Incorrect Login. Check credentials");
+    }
 });
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
-  const book = books.find(b => b.ibsn === ibsn);
+  const book = books.find(b => b.isbn === isbn);
    if (!book){
     return res.status(404).json({message:"Book not found."})
    }
