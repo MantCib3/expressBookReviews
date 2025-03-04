@@ -18,7 +18,7 @@ public_users.post("/register", (req, res) => {
 
   const newUser = { username, password };
   users.push(newUser);
-  return res.status(200).json({ message: "Successfully registered" });
+  return res.status(200).json({ message: "User registered successfully." });
 });
 
 // Get the book list available in the shop (using async/await, existing)
