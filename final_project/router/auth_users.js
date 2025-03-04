@@ -33,7 +33,7 @@ regd_users.post("/login", (req,res) => {
         req.session.authorization = {
           accessToken, username
       }
-      return res.status(200).send("Customer successfully logged in");
+      return res.status(200).send("Logged in successfully.");
     } else {
       return res.status(208).send("Incorrect Login. Check credentials");
     }
